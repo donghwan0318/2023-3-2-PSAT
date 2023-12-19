@@ -1,0 +1,227 @@
+---
+title: "Untitled"
+author: "Donghwan Kim"
+date: "2023-10-21"
+output: html_document
+---
+
+```{r message=FALSE}
+library(tidyverse)
+library(magrittr)
+library(lubridate)
+# grid.arrage
+library(gridExtra)
+#corrplot
+library(corrplot)
+```
+
+```{r message=FALSE}
+wf<-read_csv("weather_forecast.csv")
+wa<-read_csv("weather_actual.csv")
+gen <- read_csv("gens.csv")
+pred<-read_csv("pred.csv")
+inc<-read_csv("incentive.csv")
+```
+
+```{r}
+# 실제 발전량 + 날씨 데이터
+a<-left_join(gen,wa,by="time")
+
+# 예측 발전량 + 날씨 데이터 ( 예측을 10,17시 두 번하기 때문에 time과 round를 기준으로 병합)
+p<-left_join(pred,wf,by=c("time","round"))
+p<-left_join(p,inc,by=c("time","model_id"))
+inc
+# 모델과 라운드별 객체 생성 
+# ex) m01 - model id : 0 / round : 1
+# ex) m22 - model id : 2 / round : 2
+# m01,m02,m11.......,m42 까지 존재 / 모델 5개(0-4), round(1,2)
+for (i in 0:4){
+  for (j in 1:2){
+    obj_name <- paste0("m",i,j)
+    assign(obj_name,p %>% filter(model_id==i,round==j))
+  }
+}
+
+```
+
+```{r message=FALSE}
+library(tseries)
+```
+
+
+```{r}
+adf_list = wa %>% select(-time)
+k <- adf.test(adf_list$cloud)
+k$p.value
+
+p_list<-c()
+for (i in names(wa)[2:length(names(wa))]){
+  adf.test(adf_list$i)
+}
+```
+
+
+```{r}
+# 실제 기상 그냥 시간 별로 한번보기
+# 근데 모델이 이미 개발이 되어있는 상태라서 이거 보다는 모델을 봐야할 듯
+graph_list<-c()
+for (i in names(wa)[2:length(names(wa))]){
+  graph_obj <- ggplot(wa,aes(x=.data$time,y=.data[[i]]))+
+    geom_line() +
+    theme_bw()
+  graph_list<-c(graph_list,list(graph_obj))
+}
+
+grid.arrange(grobs=graph_list[1:6])
+grid.arrange(grobs=graph_list[7:13])
+```
+
+```{r}
+cordf<-a %>% select(-time)
+corr<-cor(cordf,method="kendall")
+corrplot(corr,method='shade',order='AOE',main='Correlation times series vs amount',mar=c(2,2,2,2))
+```
+
+```{r}
+graph_0<-ggplot()+geom_line(data=m01,aes(time,amount),color="red",alpha=0.5)+
+  geom_line(data=m02,aes(time,amount),color="white",alpha=0.5)
+graph_1<-ggplot()+geom_line(data=m11,aes(time,amount),color="red",alpha=0.5)+
+  geom_line(data=m12,aes(time,amount),color="white",alpha=0.5)
+graph_2<-ggplot()+geom_line(data=m21,aes(time,amount),color="red",alpha=0.5)+
+  geom_line(data=m22,aes(time,amount),color="white",alpha=0.5)
+graph_3<-ggplot()+geom_line(data=m31,aes(time,amount),color="red",alpha=0.5)+
+  geom_line(data=m32,aes(time,amount),color="white",alpha=0.5)
+graph_4<-ggplot()+geom_line(data=m41,aes(time,amount),color="red",alpha=0.5)+
+  geom_line(data=m42,aes(time,amount),color="white",alpha=0.5)
+
+model_graph_list<-c(list(graph_0),list(graph_1),list(graph_2),list(graph_3),list(graph_4))
+grid.arrange(grobs=model_graph_list)
+```
+
+```{r}
+for (i in 0:4){
+  var_name<-paste0("m",i,1)
+  n<-get(var_name)
+  corr<-cor(n %>% select(-c(round,time,model_id)),method="kendall")
+  corrplot(corr,method='shade',order='AOE',main='Correlation times series vs amount',mar=c(2,2,2,2))
+}
+
+```
+
+```{r}
+
+inc %>% filter(model_id==0) %>% ggplot+geom_histogram(aes(x=incentive))
+inc %>% filter(model_id==0) %>% ggplot+geom_line(aes(x=time,y=incentive))
+```
+
+```{r}
+### 라운드 1###
+
+# 모델0 가중치 만들기
+m01_bytime<-m01 %>% mutate(
+  시간대= format(time,"%H")
+) %>% select(time,시간대,incentive,is_utilizable,amount)
+m01_bytime %<>% filter(!is.na(incentive))
+m01_bytime %<>% group_by(시간대) %>% summarise(인센티브평균=mean(incentive))
+
+# 모델1 가중치 만들기
+m11_bytime<-m11 %>% mutate(
+  시간대= format(time,"%H")
+) %>% select(time,시간대,incentive,is_utilizable,amount)
+m11_bytime %<>% filter(!is.na(incentive))
+m11_bytime %<>% group_by(시간대) %>% summarise(인센티브평균=mean(incentive))
+
+# 모델2 가중치 만들기
+m21_bytime<-m21 %>% mutate(
+  시간대= format(time,"%H")
+) %>% select(time,시간대,incentive,is_utilizable,amount)
+m21_bytime %<>% filter(!is.na(incentive))
+m21_bytime %<>% group_by(시간대) %>% summarise(인센티브평균=mean(incentive))
+
+# 모델3 가중치 만들기
+m31_bytime<-m31 %>% mutate(
+  시간대= format(time,"%H")
+) %>% select(time,시간대,incentive,is_utilizable,amount)
+m31_bytime %<>% filter(!is.na(incentive))
+m31_bytime %<>% group_by(시간대) %>% summarise(인센티브평균=mean(incentive))
+
+# 모델4 가중치 만들기
+m41_bytime<-m41 %>% mutate(
+  시간대= format(time,"%H")
+) %>% select(time,시간대,incentive,is_utilizable,amount)
+m41_bytime %<>% filter(!is.na(incentive))
+m41_bytime %<>% group_by(시간대) %>% summarise(인센티브평균=mean(incentive))
+```
+
+```{r}
+# 모델 시간대별 평균 파일 합친거
+
+model_sum_inc <- left_join(m01_bytime,m11_bytime,by="시간대")
+model_sum_inc <- left_join(model_sum_inc,m21_bytime,by="시간대")
+model_sum_inc <- left_join(model_sum_inc,m31_bytime,by="시간대")
+model_sum_inc <- left_join(model_sum_inc,m41_bytime,by="시간대")
+
+# 이름 변경
+names(model_sum_inc)<-c("시간대","m1","m2","m3","m4","m5")
+
+# 모델 별 가중치 생성 df 분리
+model_w1<-model_sum_inc %>% mutate(
+  "0" = m1/(m1+m2+m3+m4+m5),
+  "1" = m2/(m1+m2+m3+m4+m5),
+  "2" = m3/(m1+m2+m3+m4+m5),
+  "3" = m4/(m1+m2+m3+m4+m5),
+  "4" = m5/(m1+m2+m3+m4+m5)
+) %>% select(시간대,"0","1","2","3","4")
+
+# 인센티브가 0 인 경우 NA로 처리
+model_w1[is.na(model_w1)]<-0.2
+model_w1
+
+model_w1 %<>% gather(model_id,w,2:6)
+pred_w<-pred %>% mutate(
+  시간대 = format(time,"%H")
+)
+model_w1 %<>% mutate(
+  model_id=as.numeric(model_id)
+)
+names(model_w1)<-c("시간대","w1","w2","w3","w4","w5")
+inc
+
+```
+
+```{r message=FALSE}
+model_w1 %>% write.csv(file="weight/incentive_weight.csv",row.names = FALSE,fileEncoding="cp949")
+gen10<-read_csv("data/gen_fcst_10_2023-10-23.csv")
+gen17<-read_csv("data/gen_fcst_17_2023-10-24.csv")
+```
+
+```{r message=FALSE}
+# 라운드 1
+gen10 %<>% mutate(
+  시간대 = format(time,"%H")
+)
+w_gen10<-left_join(gen10,model_w1,by="시간대")
+
+w_gen10 %>% mutate(
+  w_sum = (model1*w1+model2*w2+model3*w3+model4*w4+model5*w5),
+  sum = (model1+model2+model3+model4+model5)/5
+) %>% select(시간대,w_sum)
+```
+
+
+```{r message=FALSE}
+# 라운드 2
+gen17 %<>% mutate(
+  시간대 = format(time,"%H")
+)
+w_gen17<-left_join(gen17,model_w1,by="시간대")
+w_gen17
+w_gen17 %>% mutate(
+  w_sum = (model1*w1+model2*w2+model3*w3+model4*w4+model5*w5),
+  sum = (model1+model2+model3+model4+model5)/5
+) %>% select(시간대,w_sum) %>% write.csv(file="result/gen17_incentive_weight)1024.csv",row.names = FALSE,fileEncoding="cp949")
+
+
+```
+
+

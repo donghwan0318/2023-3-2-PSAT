@@ -1,0 +1,95 @@
+---
+title: "Untitled"
+author: "Donghwan Kim"
+date: "2023-10-29"
+output: html_document
+---
+
+```{r message=FALSE}
+library(tidyverse)
+library(magrittr)
+library(lubridate)
+# grid.arrage
+library(gridExtra)
+#corrplot
+library(corrplot)
+library(reshape2)
+library(dtwclust)
+library(lubridate)
+```
+
+```{r message=FALSE}
+gens <- read_csv("../gens.csv")
+gens$time = gens$time - hours(16)
+gens$month <- month(gens$time)
+gens$hour <- hour(gens$time)
+gens_fall <- gens %>% filter(month>=9,month<=11,hour<=15,hour>=10)
+gens_fall %<>% select(amount)
+a<-tslist(gens_fall)
+```
+
+```{r}
+gens
+u <- gens %>% select(amount)
+pacf(u)
+acf(u)
+
+i<-ts(u,frequency = 24,start=c(2022,6,18))
+i<-diff(i,differences=24)
+pacf(i)
+acf(i)
+```
+
+
+```{r}
+array_data <- array(a, dim = c(5, 1, 135))  # 예시 3D 배열, 실제 데이터를 사용
+
+# 빈 리스트 생성
+arr_list <- list()
+
+# 배열을 리스트로 변환하여 리스트에 추가
+for (i in 1:dim(array_data)[3]) {
+  sub_array <- array_data[,,i]
+  arr_list <- append(arr_list, list(sub_array))
+}
+
+```
+
+```{r}
+eval_clust
+```
+
+```{r}
+pc.dtw<-tsclust(arr_list,k=2L:10L,)
+eval_clust<-sapply(pc.dtw, cvi)
+plot(eval_clust[1,],type="l", main="sil", xlab="The number of clusters", ylab="maximize")
+plot(eval_clust[2,],type="l", main="score function", xlab="The number of clusters", ylab="maximize")
+plot(eval_clust[3,],type="l", main="Calinski-Harabasz index", xlab="The number of clusters", ylab="maximize")
+plot(eval_clust[4,],type="l", main="Davies-Bouldin index", xlab="The number of clusters", ylab="minimize")
+plot(eval_clust[5,],type="l", main="Modified Davies-Bouldin index", xlab="The number of clusters", ylab="minimize")
+plot(eval_clust[6,],type="l", main="Dunn index", xlab="The number of clusters", ylab="maximize")
+plot(eval_clust[7,],type="l", main="COP index", xlab="The number of clusters", ylab="minimize")
+```
+
+
+```{r}
+dtw_cluster = tsclust(arr_list, type="partitional",k=5,
+distance="dtw_basic",centroid = "pam",seed=1234,trace=T,
+args = tsclust_args(dist = list(window.size = 60)))
+
+plot(dtw_cluster)
+
+dtw_cluster
+```
+
+
+```{r}
+dtw_cluster = tsclust(arr_list, type="partitional",k=5,
+distance="EUCL",centroid = "pam",seed=1234,trace=T,
+args = tsclust_args(dist = list(window.size = 60)))
+
+plot(dtw_cluster)
+
+dtw_cluster
+```
+

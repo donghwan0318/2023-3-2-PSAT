@@ -1,0 +1,19 @@
+1. sales
+store_nbr : 가게 고유번호
+family : 품목
+sales : 해당 날짜, 가게에서의 총 판매량. 소수로 표현된 것은 상품이 분할된 단위로 팔린 경우를 의미 (ex- 치즈 1.5kg)
+onpromotion : 해당 날짜, 가게, 품목(family)에 속한 상품 중 할인하고 있었던 상품의 개수
+
+2. holidays_event
+transferred : 원래 공휴일이었으나 어떠한 이유로 옮겨짐을 뜻함
+
+3. oil
+유가데이터
+에콰도르의 경제상황은 유가 변동에 매우 민감함
+
+4. stores
+가게에 대한 메타데이터로 city, type, cluster를 포함
+cluster: 비슷한 가게를 묶은 클러스터
+type : store의 종류
+그러나 각 클러스터, type이 어떤 특징을 지니는지는 알지 못함
+

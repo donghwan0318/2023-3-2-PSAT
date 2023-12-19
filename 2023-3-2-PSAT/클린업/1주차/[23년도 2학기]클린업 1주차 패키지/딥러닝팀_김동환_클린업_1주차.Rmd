@@ -1,0 +1,741 @@
+---
+title: "클린업 1주차 패키지"
+author: "Donghwan Kim"
+date: "2023-09-10"
+output: 
+  html_document:
+    code_folding: show
+    toc : true
+    toc_float : true
+---
+
+```{r include=FALSE}
+install.packages("rms",repos="http://cran.us.r-project.org")
+install.packages("finalfit",repos="http://cran.us.r-project.org")
+install.packages("gridExtra",repos="http://cran.us.r-project.org")
+install.packages("CORElearn",repos="http://cran.us.r-project.org")
+install.packages("lightgbm",repos="http://cran.us.r-project.org")
+library(tidyverse)
+library(rms)
+library(mice)
+library(finalfit)
+library(gridExtra)
+library(randomForest)
+library(RColorBrewer)
+library(CORElearn)
+library(lightgbm)
+library(caret)
+```
+
+
+
+# Chapter 1 : Data Preprocessing
+
+```{r results=FALSE}
+getwd()
+train_data = read.csv("train.csv")
+test_data = read.csv("test.csv")
+```
+
+## 문제1
+
+```{r}
+# 대강 살펴보기
+train_data %>% head(3)
+```
+
+```{r}
+# 차원확인하기
+train_data %>% dim()
+```
+
+```{r}
+# 자료 타입 확인하기
+# x변수가 정수형과 범주형으로 구성되어있음.
+train_data %>% str()
+```
+
+
+```{r}
+# 기초통계량 확인하기
+train_data %>% describe()
+```
+
+```{r}
+# 결측치 확인 결과 없음.
+train_data %>% is.na() %>% sum()
+```
+
+## 문제2
+
+```{r}
+# 불필요한 열 제거.
+train <- train_data %>% select(-c(id,X))
+test <- test_data %>% select(-c(id,X))
+train %>% colnames() %>% length()
+test %>% colnames() %>% length()
+```
+
+## 문제3
+
+```{r}
+# 열 이름 바꾸기.
+for (i in 1:21){
+  names(train)[[i]] <- strsplit(names(train)[[i]],"\\.") %>% map_chr(.,2)
+  names(test)[[i]] <- strsplit(names(test)[[i]],"\\.") %>% map_chr(.,2)
+}
+names(train)
+names(test)
+```
+
+## 문제4
+
+```{r}
+# personal_status 열로 파생변수 만들기.
+train <- train %>% 
+  mutate(sex = strsplit(personal_status," ") %>% map_chr(.,1),
+         marital_status = strsplit(personal_status," ") %>% map_chr(.,2)
+         ) %>% 
+  select(-(personal_status))
+
+test <- test %>% 
+  mutate(sex = strsplit(personal_status," ") %>% map_chr(.,1),
+         marital_status = strsplit(personal_status," ") %>% map_chr(.,2)
+         ) %>% 
+  select(-(personal_status))
+  
+```
+
+```{r echo=FALSE}
+names(train)
+print("--------------------------------------------------------------------")
+names(test)
+```
+## 문제5
+
+```{r}
+#결측치 변경 전 결측치 갯수 확인
+cat('train missing before : ',
+      sum(train['checking_status']=='no checking') + sum(train['savings_status']=='no known savings')+sum(train['property_magnitude']=='no known property'),end= "\n")
+cat('test missing before : ',
+      sum(test['checking_status']=='no checking') + sum(test['savings_status']=='no known savings')+sum(test['property_magnitude']=='no known property'))
+```
+```{r}
+# 결측치 변경 후 결측치 갯수 동일
+train <- train %>% 
+  mutate(checking_status = ifelse(checking_status=="no checking",NA,checking_status),
+         savings_status = ifelse(savings_status == "no known savings",NA,savings_status),
+         property_magnitude = ifelse(property_magnitude == "no known property",NA,property_magnitude))
+test <- test %>% 
+  mutate(checking_status = ifelse(checking_status=="no checking",NA,checking_status),
+         savings_status = ifelse(savings_status == "no known savings",NA,savings_status),
+         property_magnitude = ifelse(property_magnitude == "no known property",NA,property_magnitude))
+train %>% is.na() %>% sum() %>% cat('train missing after : ', ., '\n')
+test %>% is.na() %>% sum() %>% cat('train missing after : ', ., '\n')
+```
+
+## 문제 6
+
+### 전처리전 갯수확인
+
+```{r}
+# 전처리전 갯수확인
+train %>% filter(marital_status=='div/dep/mar' | 
+                   marital_status=='div/sep' | 
+                   marital_status=='mar/wid') %>% dim() %>% 
+  cat('train marital_status before : ', ., '\n')
+
+test %>% filter(marital_status=='div/dep/mar' | 
+                   marital_status=='div/sep' | 
+                   marital_status=='mar/wid') %>% dim() %>% 
+  cat('test marital_status before : ', ., '\n')
+
+train %>% filter(credit_history=="no credits/all paid") %>% dim() %>%
+cat('train credit_history before : ', ., '\n')
+
+test %>% filter(credit_history=="no credits/all paid") %>% dim() %>% 
+cat('test credit_history before : ', ., '\n')
+```
+
+```{r}
+train <- train %>% 
+  mutate(credit_history = ifelse(credit_history=="no credits/all paid","no credits",credit_history),
+         marital_status = ifelse( marital_status == "div/sep" | 
+                                   marital_status == "mar/wid",
+                                 "div/dep/mar",marital_status))
+test <- test %>% 
+  mutate(credit_history = ifelse(credit_history=="no credits/all paid","no credits",credit_history),
+         marital_status = ifelse( marital_status == "div/sep" | 
+                                   marital_status == "mar/wid",
+                                 "div/dep/mar",marital_status))
+```
+
+### 전처리후 갯수확인
+
+```{r}
+# 전처리 후 갯수 확인
+train %>% filter(marital_status=='div/dep/mar') %>% dim() %>% 
+  cat('train marital_status after : ', ., '\n')
+
+test %>% filter(marital_status=='div/dep/mar') %>% dim() %>% 
+  cat('test marital_status after : ', ., '\n')
+
+train %>% filter(credit_history=="no credits") %>% dim() %>%
+cat('train credit_history after : ', ., '\n')
+
+test %>% filter(credit_history=="no credits") %>% dim() %>% 
+cat('test credit_history after : ', ., '\n')
+```
+
+## 문제 7
+
+### 처리전 unique 확인
+
+```{r}
+# unique 확인
+train %>% select(checking_status) %>% distinct()
+train %>% select(savings_status) %>% distinct()
+train %>% select(employment) %>% distinct()
+```
+
+```{r}
+# 순서형 자료로 변환
+train <- train %>% 
+  mutate(
+    checking_status = case_when(
+      checking_status == "<0"~1,
+      checking_status == "0<=X<200"~2,
+      checking_status == ">=200"~3,
+      )
+    )
+train <- train %>% 
+  mutate(
+    savings_status = case_when(
+      savings_status == "<100"~1,
+      savings_status == "100<=X<500"~2,
+      savings_status == "500<=X<1000"~3,
+      savings_status == ">=1000"~4
+      )
+    )
+train <- train %>% 
+  mutate(
+    employment = case_when(
+      employment == "unemployed"~1,
+      employment == "<1"~2,
+      employment == "1<=X<4"~3,
+      employment == "4<=X<7"~4,
+      employment == ">=7"~5,
+      )
+    )
+
+```
+
+```{r}
+# test에도 동일하게 순서형 자료로 변환
+test <- test %>% 
+  mutate(
+    checking_status = case_when(
+      checking_status == "<0"~1,
+      checking_status == "0<=X<200"~2,
+      checking_status == ">=200"~3,
+      )
+    )
+test <- test %>% 
+  mutate(
+    savings_status = case_when(
+      savings_status == "<100"~1,
+      savings_status == "100<=X<500"~2,
+      savings_status == "500<=X<1000"~3,
+      savings_status == ">=1000"~4
+      )
+    )
+test <- test %>% 
+  mutate(
+    employment = case_when(
+      employment == "unemployed"~1,
+      employment == "<1"~2,
+      employment == "1<=X<4"~3,
+      employment == "4<=X<7"~4,
+      employment == ">=7"~5,
+      )
+    )
+```
+
+### 처리후 unique 확인
+
+```{r}
+# 처리후 unique 확인
+train %>% select(checking_status) %>% distinct()
+train %>% select(savings_status) %>% distinct()
+train %>% select(employment) %>% distinct()
+```
+
+## 문제 보너스 1
+
+```
+순서형 변수는 범주간 높음-낮음, 선호-불호, 긍정-부정 등의 순서 혹은 등급을 나타낸다.
+반면에 명목형 변수는 이러한 것을 고려하지 않는 변수이다. 이 때문에 순서형 변수를 명목형 변수로 변환시, 순서형 변수에 있던 순서에 대한 정보가 사라지게 됨으로 정보 손실이 발생한다. 
+```
+
+## 문제 보너스 2
+
+```
+checking_status 열에서 no checking은 확인이 안된 것을, saving_satuts 열에서 no known savings는 
+저축 상태를 알 수 없는 것을 의미함으로 결측치로 처리하는 것이 맞으나, employment에서 unemployed는
+고용이 되었는지 되지않았는지 모르는 것을 의미하는 것이 아니고, '고용이 안되었음' 을 의미함으로 결측치로 처리하기에는 부적합하다.
+```
+
+## 문제 8
+
+### 변환 전 데이터 type 확인
+
+```{r}
+## 변환 전 데이터 type확인
+str(train)
+```
+
+### 변환 후 데이터 type 확인
+
+```{r}
+# 변환 후 데이터 type 확인
+for (col in names(train)) {
+  if (is.character(train[[col]])) {
+    train[[col]] <- as.factor(train[[col]])
+  } else if (is.integer(train[[col]])) {
+    train[[col]] <- as.numeric(train[[col]])
+  }
+}
+for (col in names(test)) {
+  if (is.character(test[[col]])) {
+    test[[col]] <- as.factor(test[[col]])
+  } else if (is.integer(test[[col]])) {
+    test[[col]] <- as.numeric(test[[col]])
+  }
+}
+str(train)
+```
+
+## 문제 9
+```
+같이 진행 하였음.
+```
+
+## 문제 10
+
+```{r}
+par(cex = 0.8)
+train %>% select(class,checking_status,savings_status,property_magnitude) %>% md.pattern(plot=TRUE,rotate.names=TRUE)
+```
+
+## 문제 11
+
+```
+checking_status 와 savings_status는 범주형 변수로 처리하는 것이 맞음. 근데 문제 7에서 순서형 자료로 1,2,3.. 을 부여하고 이후 문제 8에서 int를 num으로 chr를 factor로 변경하는 과정에서 numeric으로 처리되었음. 그 때문에 연속형변수로 다뤄져서 missing_pairs() 그래프에서 두 변수에 대한 부분이 이상하게 나타나짐.
+```
+
+```{r warning=FALSE, message=FALSE}
+train %>% select(class,checking_status,savings_status,property_magnitude) %>% missing_pairs() %>%  + theme(
+  text = element_text(size = 8)  # 글자 크기 조절
+)
+```
+```
+checking_status, savings_status를 factor로 처리하고 그래프를 다시 그렸음. 지금은 각 변수끼리의 결측치 발생 빈도만을 시각화 하고자하는 것임으로 순서형 자료를 factor로 전환문제가 없음.
+```
+
+```{r warning=FALSE, message=FALSE}
+z<-train
+z$checking_status<-as.factor(train$checking_status)
+z$savings_status<-as.factor(train$savings_status)
+z %>% select(class,checking_status,savings_status,property_magnitude) %>% missing_pairs() %>%  + theme(
+  text = element_text(size = 8))
+  
+```
+
+### missing data matrix 해석
+
+* class 일 경우 
+
+  * checking_status의 결측치가 good 부분에 상당히 많은 것을 알 수 있음.
+  
+* checking_status 일 경우 
+
+  * savings_status, property_magnitude의 결측치가 범주 별로 고르게 분포함을 알 수 있음.
+  
+* saving_status 일 경우 
+
+  * checking status의 결측치가 범주 1에 좀 많이 분포하고 있는 것이 확인됨 .
+  
+  * savings_status의 NA 중 50퍼센트 정도가 checking stauts와 같은 열에서 발생함을 확인할 수 있음. 
+
+* property_magnitude 일 경우
+
+  * savings_status의 결측치는 각 범주 별 고르게 분포함.
+  
+  * checking_status의 결측치도 나름 고르게 분포함.
+  
+  * savings_status가 결측치 일 때, checking_status의 결측치의 비율이 약 50퍼센트 였던 것에 비해 그 반대는 비율이 상대적으로 낮음.
+
+
+
+## 문제 12
+
+### 전처리 전 갯수 확인
+
+```{r}
+# 결측치 처리 전 갯수 확인
+train$property_magnitude %>% is.na() %>% sum() %>% 
+  cat("missing property magnitude before : ", .,end="\n")
+train$checking_status %>% is.na() %>% sum() %>% 
+  cat("missing checking status before : ", .,end="\n")
+train$savings_status %>% is.na() %>% sum() %>% 
+  cat("missing savings status before : ", .)
+```
+
+```{r}
+train %>% select(checking_status,savings_status) %>% table()
+```
+
+```{r}
+# mode 함수 정의
+getmode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+mode_value <- getmode(train$property_magnitude)
+
+# 결측치 대체
+train <- train %>% mutate(
+  property_magnitude = ifelse(property_magnitude %>% is.na(),mode_value,property_magnitude),
+  checking_status = case_when(
+    ((checking_status %>% is.na) & (savings_status == 1)) ~ 1,
+    ((checking_status %>% is.na) & (savings_status == 2)) ~ 2,
+    ((checking_status %>% is.na) & (savings_status == 3)) ~ 2,
+    ((checking_status %>% is.na) & (savings_status == 4)) ~ 2,
+    ((checking_status %>% is.na) & (savings_status %>% is.na)) ~ 1,
+    TRUE ~ checking_status
+  ),
+  savings_status = ifelse(savings_status %>% is.na(),1,savings_status))
+
+# test에도 동일하게 처리
+test <- test %>% mutate(
+  property_magnitude = ifelse(property_magnitude %>% is.na(),mode_value,property_magnitude),
+  checking_status = case_when(
+    ((checking_status %>% is.na) & (savings_status == 1)) ~ 1,
+    ((checking_status %>% is.na) & (savings_status == 2)) ~ 2,
+    ((checking_status %>% is.na) & (savings_status == 3)) ~ 2,
+    ((checking_status %>% is.na) & (savings_status == 4)) ~ 2,
+    ((checking_status %>% is.na) & (savings_status %>% is.na)) ~ 1,
+    TRUE ~ checking_status
+  ),
+  savings_status = ifelse(savings_status %>% is.na(),1,savings_status))
+
+```
+
+### 전처리 후 갯수 확인
+
+```{r}
+# 결측치 처리 후 갯수 확인
+train$property_magnitude %>% is.na() %>% sum() %>% 
+  cat("missing property magnitude after : ", .,end="\n")
+train$checking_status %>% is.na() %>% sum() %>% 
+  cat("missing checking status after : ", .,end="\n")
+train$savings_status %>% is.na() %>% sum() %>% 
+  cat("missing savings status after : ", .)
+```
+
+# Chapter 2 : EDA
+
+## 문제 1
+
+### 각각의 변수에 대해 그래프 만들고 저장하기
+
+```{r warning=FALSE, message=FALSE}
+color3 <- c("#00AFBB", "#E7B800", "#999999")
+skyblue <-"#00AFBB"
+num_list <-c("duration","credit_amount","age")
+graph_list <-c()
+
+for (names in colnames(train)){
+  if (names %in% num_list){
+    x <- ggplot(train,aes(x=.data[[names]],y=..density..))+
+      geom_histogram(color='black',fill=skyblue,alpha=0.5)+
+      geom_density(fill=skyblue,alpha=0.2,color=skyblue)+
+      labs(x=names,fill=names)+
+      theme_classic()+
+      theme(text = element_text(size=5))
+    graph_list<-c(graph_list,list(x))
+    
+  }
+  
+  else if(length(unique(train[[names]]))>3){
+    z <- ggplot(train)+geom_bar(aes(x=.data[[names]],
+                                    fill=factor(.data[[names]])),
+                                color='black'
+                                )+
+      scale_fill_brewer(palette="Set3")+
+      labs(x=names,fill=names)+
+      theme(text=element_text(size=1))+
+      theme_classic()+
+      theme(legend.key.size = unit(0.2,'cm'),
+            text = element_text(size=5))
+    graph_list<-c(graph_list,list(z))
+  }
+  else if (length(unique(train[[names]])<=3)){
+    y <- ggplot(train)+geom_bar(aes(x=.data[[names]],fill=factor(.data[[names]])),
+                                color='black'
+                                )+
+      scale_fill_manual(values=color3)+
+      labs(x=names,fill=names)+
+      theme_classic()+
+      theme(legend.key.size = unit(0.2,'cm'),
+            text = element_text(size=5))
+    graph_list<-c(graph_list,list(y))
+  }
+}
+
+```
+### grid.arrange로 그래프 합치기
+
+```{r message=FALSE, warning=FALSE}
+grid.arrange(grobs=graph_list[1:22] , ncol=4,nrow=6)
+```
+
+## 문제 보너스 3
+
+### 각각의 변수에 대해 class별 그래프 만들고 저장하기
+
+```{r warning=FALSE, message=FALSE}
+color3 <- c("#00AFBB", "#E7B800", "#999999")
+skyblue <-"#00AFBB"
+num_list <-c("duration","credit_amount","age")
+graph_list <-c()
+
+for (names in colnames(train)){
+  if (names %in% num_list){
+    x <- ggplot(train,aes(x=.data[[names]],y=..density..,fill=class))+
+      geom_histogram(color='black',alpha=0.5,position = 'dodge')+
+      geom_density(alpha=0.2,color='black')+
+      labs(x=names,fill=names)+
+      theme_classic()+
+      theme(legend.key.size = unit(0.2,'cm'),
+            text = element_text(size=7))
+    graph_list<-c(graph_list,list(x))
+    
+  }
+  
+  else if(length(unique(train[[names]]))>3){
+    z <- ggplot(train)+geom_bar(aes(x=class,fill=factor(.data[[names]])),
+                                color='black',
+                                position='dodge'
+                                )+
+      scale_fill_brewer(palette="Set1")+
+      labs(x=names,fill=names)+
+      theme(text=element_text(size=1))+
+      theme_classic()+
+      theme(legend.key.size = unit(0.2,'cm'),
+            text = element_text(size=7))
+    graph_list<-c(graph_list,list(z))
+  }
+  else if (length(unique(train[[names]])<=3)){
+    y <- ggplot(train)+geom_bar(aes(x=class,fill=factor(.data[[names]])),
+                                color='black',
+                                position='dodge'
+                                )+
+      scale_fill_manual(values=color3)+
+      labs(x=names,fill=names)+
+      theme_classic()+
+      theme(legend.key.size = unit(0.2,'cm'),
+            text = element_text(size=7))
+    graph_list<-c(graph_list,list(y))
+  }
+}
+
+```
+
+### grid.arrange로 그래프 합치기
+
+```{r message=FALSE, warning=FALSE}
+grid.arrange(grobs=graph_list[1:12] , ncol=3,nrow=4)
+```
+```{r message=FALSE, warning=FALSE}
+grid.arrange(grobs=graph_list[13:22] , ncol=3,nrow=4)
+```
+
+```{r}
+train %>% filter(class=='good') %>% dim()
+train %>% filter(class=='bad') %>% dim()
+```
+
+* class 별로 분포에 크게 차이가 보이지않는다. 
+* class에서 good가 bad의 약 2배 정도 많은데, 분포도 그냥 bad의 2배 해둔거 처럼 생겼다.
+
+
+
+# Chapter 3 모델링
+
+## 문제 1
+```
+위에서 불러옴
+
+```
+## 문제 2
+
+
+1. ntree: 의사결정 나무의 개수로 기본값은 500임. ntree가 높을수록 모델 복잡도가 증가하여 정확도가 향상될 수 있지만, 과대적합의 위험이 증가함.
+
+1. mtry: 각 의사결정 나무에서 분할할 때 랜덤하게 선택되는 변수의 개수로 기본값은 sqrt(p)임. mtry가 높을수록 모델의 복잡도가 증가하여 정확도가 향상될 수 있지만, 과대적합의 위험도 증가함.
+
+1. maxdepth: 각 의사결정 나무의 최대 깊이로 기본값은 5임. maxdepth가 높을수록 모델의 복잡도가 증가하여 정확도가 향상될 수 있지만, 과대적합의 위험도 증가함.
+
+1. nodesize: 각 의사결정 나무의 리프 노드에 포함되어야 하는 최소 데이터 수로 기본값은 5임. nodesize가 작을수록 모델의 복잡도가 증가하여 정확도가 향상될 수 있지만, 과대적합의 위험도 증가함.
+
+1. minsplit: 각 의사결정 나무에서 분할을 수행하기 위한 최소 데이터 수입니다. 기본값은 2임. minsplit이 작을수록 모델의 복잡도가 증가하여 정확도가 향상될 수 있지만, 과대적합의 위험도 증가함.
+
+1. replace: 각 의사결정 나무에서 데이터를 샘플링할 때 샘플을 대체할지 여부로 기본값은 TRUE입니다. replace가 TRUE이면 각 데이터가 여러 번 샘플링될 수 있음. 이는 과대적합의 위험을 줄이는 데 도움이 될 수 있음.
+
+1. importance: 변수 중요도를 계산할지 여부로 기본값은 FALSE임. importance가 TRUE이면 각 변수가 모델의 예측에 얼마나 중요한지 계산함.
+
+
+
+## 문제 3
+
+```{r}
+x_train<-train %>% select(-class)
+rf_model<-randomForest(x=x_train,y=train$class,ntree=100,importance = TRUE)
+```
+
+### 변수 중요도 출력
+
+```{r warning=FALSE}
+impcolor <- brewer.pal(22,"Set1")
+varImpPlot(rf_model,main="feature importance plot",col=impcolor,
+           type=1)
+```
+
+```{r}
+varImpPlot(rf_model,main="feature importance plot",col=impcolor,
+           type=2)
+```
+
+
+### 대출 승인에 영향을 미치는 변수
+
+* varimpplot은 2가지를 기준으로 변수중요도를 제시한다.
+  1. MeanDecreaseAccuracy
+  1. MeanDecreaseGini
+
+* 그래프를 기준으로 변수 중요도가 크게 꺽이는 지점인 5번째 변수까지 2가지 기준에 대해 확인해보면 아래와 같다.
+
+```{r echo=FALSE}
+MDG<-importance(rf_model)[,"MeanDecreaseGini"]
+MDA<-importance(rf_model)[,"MeanDecreaseAccuracy"]
+print("MeanDecreaseAccuracy -> ",end="\n")
+names(sort(MDG,decreasing = T)[1:5])
+print("----------------------------------------------------------------------",end="\n")
+print("MeanDecreaseGini -> ",end="\n")
+names(sort(MDA,decreasing = T)[1:5])
+```
+
+* 공통적으로는 credit_amount, duration, purpose, credit_history가확인되고,
+* 추가적으로 MeanDecreaseAccuracy 에서는 age가 MeanDecreaseGini에서는 marital_status가 확인 되는 것을 알 수 있다.
+
+## 문제 4
+
+```{r}
+lg_model <- glm(class~.,data=train,family="binomial")
+summary(lg_model)
+```
+
+```
+logistic결과에서 계수는 odds에 대한 변화량임으로, y에 대한 영향이라고 판단할 수 있다.p-value와 계수의 크기를 고려하여 변수를 선택해보면 다음과 같다. 제시된 코드는 계수를 큰 순으로 정렬하고, p값이 유의하면 선택해서 n_list에 추가하는 방식이다. 이때 feature importance plot에서 중요도가 크게 꺾이는 지점을 선택했듯이, 큰 순서대로 최대 15개 까지만 고려하여 그 중에서 p값이 유의한 것을 채택하였다. 이를 제외한 변수들은 중요하지 않을 수 있다고 판단한다.
+```
+```{r}
+j=0
+n_list <-c()
+coefficients <- lg_model %>% coef()
+coefficient_matrix <- summary(lg_model)$coefficients
+for (i in names(sort(coefficients,decreasing = T))){
+  j = j+1
+  if (abs(coefficient_matrix[,4][[i]])<=0.05){
+    n_list <-c(n_list,i)
+  }
+  if (j==15){
+    break
+  }
+}
+```
+
+![](D:/3학년/2학기/32기피셋/클린업/1주차/[23년도 2학기]클린업 1주차 패키지/coef.png){height=100px}
+
+```
+x변수가 총 21개여서 feature importance에서 5번째에서 짜른 것과 비교해 봤을 때 15개가 너무 많아보일 수 있는데 그렇게 고려한 이유는 (애초에 주관적이긴하지만) 사진에서 purpose부분을 보면 알 수 있듯이 각 변수의 범주별로 계수가 추정되기 때문에 실제로는 21개가 아니기 때문이다.
+```
+## 문제5
+
+```{r}
+cr_model <- CoreModel(class~., train)
+sorted_fi<-sort(attrEval(class~., train, estimator="Relief"))
+barplot(sorted_fi,col=impcolor,horiz=T,las=2,cex.names=0.5,cex.axis = 0.5)
+```
+
+## 문제 보너스 4
+
+
+* Relief 알고리즘은 변수 선택에 사용할 수 있는 알고리즘. Relief 알고리즘은 각 특성의 값을 무작위로 수정하고 이를 이용하여최종적으로그특성이 클래스 분류에 얼마나 중요한지를 측정함.
+
+* Relief 알고리즘은 다음과 같은 단계로 수행됨.
+  
+  1. 훈련 데이터 세트에서 데이터 포인트 하나를 선택.
+  
+  1. 선택한 데이터 포인트의 클래스를 찾음.
+  
+  1. 선택한 데이터 포인트의 각 특성의 값을 무작위로 수정.
+  
+  1. 수정된 데이터 포인트를 사용하여 클래스 레이블을 예측.
+  
+  1. 예측된 클래스 레이블과 실제 클래스 레이블이 일치하지 않으면해당 특성의 중요도를 증가시킴.
+  
+  1. 모든 데이터 포인트에 대해 위의 단계를 반복함.
+  
+  1. 각 특성의 중요도를 합산하여 특성 중요도 점수를 계산.
+  
+
+* Relief 알고리즘은 다음과 같은 장점이 있음.
+
+  1. 특성의 중요도를 상대적으로 평가할 수 있음.
+  
+  1. 특성의 스케일에 영향을 받지 않음.
+  
+  1. 다중 클래스 분류에 적용할 수 있음.
+  
+* Relief 알고리즘은 다음과 같은 단점이 있음.
+
+  1. 시간이 오래 걸릴 수 있음.
+  
+  1. 이상치에 민감할 수 있음.
+
+## 문제 6
+
+
+```{r}
+x_train <- train %>% select(credit_amount, duration, purpose, credit_history,checking_status, savings_status,age,marital_status)
+x_test <- test %>% select(credit_amount, duration, purpose, credit_history,checking_status, savings_status,age,marital_status)
+
+final_model<-randomForest(x=x_train,y=train$class)
+pred<-predict(final_model,x_test)
+confusionMatrix(pred,test$class,mode='everything')
+```
+
+```{r}
+x_train <- train %>% select(-class)
+x_test<-test %>% select(-class)
+final_model<-randomForest(x=x_train,y=train$class)
+pred<-predict(final_model,x_test)
+confusionMatrix(pred,test$class,mode='everything')
+```
+
+* F1 score가 0.3 언저리로 처참한 성능을 보이고 있다. full model이 변수 선택을 한 모델 보다 성능이좋다.
+* 그러나 일단 기본적인 성능이 너무 낮아서, 변수를 추가로 수집하든가 아니면 데이터를 더 확보하던가, 변수 변환을 하던가, 파생변수를 하던가 등의 방법이 필요해보인다.
+* (추신) R에서 lgb,xgb 쓸라니까 진짜 복잡했는데 꾸역꾸역해서 되긴됐음. 근데 rf보다 성능이 더 않좋았음. 모든 class를 good으로 예측함.
+

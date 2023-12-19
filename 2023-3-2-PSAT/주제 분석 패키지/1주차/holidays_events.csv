@@ -1,0 +1,234 @@
+"date","type","locale","locale_name","description","transferred"
+2014-07-01,"Event","National","Ecuador","Mundial de futbol Brasil: Octavos de Final",FALSE
+2014-07-03,"Holiday","Local","El Carmen","Cantonizacion de El Carmen",FALSE
+2014-07-03,"Holiday","Local","Santo Domingo","Fundacion de Santo Domingo",FALSE
+2014-07-04,"Event","National","Ecuador","Mundial de futbol Brasil: Cuartos de Final",FALSE
+2014-07-05,"Event","National","Ecuador","Mundial de futbol Brasil: Cuartos de Final",FALSE
+2014-07-08,"Event","National","Ecuador","Mundial de futbol Brasil: Semifinales",FALSE
+2014-07-09,"Event","National","Ecuador","Mundial de futbol Brasil: Semifinales",FALSE
+2014-07-12,"Event","National","Ecuador","Mundial de futbol Brasil: Tercer y cuarto lugar",FALSE
+2014-07-13,"Event","National","Ecuador","Mundial de futbol Brasil: Final",FALSE
+2014-07-23,"Holiday","Local","Cayambe","Cantonizacion de Cayambe",FALSE
+2014-07-24,"Additional","Local","Guayaquil","Fundacion de Guayaquil-1",FALSE
+2014-07-25,"Holiday","Local","Guayaquil","Fundacion de Guayaquil",FALSE
+2014-08-05,"Holiday","Local","Esmeraldas","Fundacion de Esmeraldas",FALSE
+2014-08-10,"Holiday","National","Ecuador","Primer Grito de Independencia",FALSE
+2014-08-15,"Holiday","Local","Riobamba","Fundacion de Riobamba",FALSE
+2014-08-24,"Holiday","Local","Ambato","Fundacion de Ambato",FALSE
+2014-09-28,"Holiday","Local","Ibarra","Fundacion de Ibarra",FALSE
+2014-10-07,"Holiday","Local","Quevedo","Cantonizacion de Quevedo",FALSE
+2014-10-09,"Holiday","National","Ecuador","Independencia de Guayaquil",TRUE
+2014-10-10,"Transfer","National","Ecuador","Traslado Independencia de Guayaquil",FALSE
+2014-11-02,"Holiday","National","Ecuador","Dia de Difuntos",FALSE
+2014-11-03,"Holiday","National","Ecuador","Independencia de Cuenca",FALSE
+2014-11-06,"Holiday","Regional","Santo Domingo de los Tsachilas","Provincializacion de Santo Domingo",FALSE
+2014-11-07,"Holiday","Regional","Santa Elena","Provincializacion Santa Elena",FALSE
+2014-11-10,"Holiday","Local","Guaranda","Independencia de Guaranda",FALSE
+2014-11-11,"Holiday","Local","Latacunga","Independencia de Latacunga",FALSE
+2014-11-12,"Holiday","Local","Ambato","Independencia de Ambato",FALSE
+2014-11-28,"Event","National","Ecuador","Black Friday",FALSE
+2014-12-01,"Event","National","Ecuador","Cyber Monday",FALSE
+2014-12-05,"Additional","Local","Quito","Fundacion de Quito-1",FALSE
+2014-12-06,"Holiday","Local","Quito","Fundacion de Quito",FALSE
+2014-12-08,"Holiday","Local","Loja","Fundacion de Loja",FALSE
+2014-12-20,"Work Day","National","Ecuador","Recupero Puente Navidad",FALSE
+2014-12-21,"Additional","National","Ecuador","Navidad-4",FALSE
+2014-12-22,"Holiday","Local","Salinas","Cantonizacion de Salinas",FALSE
+2014-12-22,"Additional","National","Ecuador","Navidad-3",FALSE
+2014-12-23,"Additional","National","Ecuador","Navidad-2",FALSE
+2014-12-24,"Additional","National","Ecuador","Navidad-1",FALSE
+2014-12-25,"Holiday","National","Ecuador","Navidad",FALSE
+2014-12-26,"Bridge","National","Ecuador","Puente Navidad",FALSE
+2014-12-26,"Additional","National","Ecuador","Navidad+1",FALSE
+2014-12-31,"Additional","National","Ecuador","Primer dia del ano-1",FALSE
+2015-01-01,"Holiday","National","Ecuador","Primer dia del ano",FALSE
+2015-01-02,"Bridge","National","Ecuador","Puente Primer dia del ano",FALSE
+2015-01-10,"Work Day","National","Ecuador","Recupero Puente Primer dia del ano",FALSE
+2015-02-16,"Holiday","National","Ecuador","Carnaval",FALSE
+2015-02-17,"Holiday","National","Ecuador","Carnaval",FALSE
+2015-03-02,"Holiday","Local","Manta","Fundacion de Manta",FALSE
+2015-04-01,"Holiday","Regional","Cotopaxi","Provincializacion de Cotopaxi",FALSE
+2015-04-03,"Holiday","National","Ecuador","Viernes Santo",FALSE
+2015-04-12,"Holiday","Local","Cuenca","Fundacion de Cuenca",FALSE
+2015-04-14,"Holiday","Local","Libertad","Cantonizacion de Libertad",FALSE
+2015-04-21,"Holiday","Local","Riobamba","Cantonizacion de Riobamba",FALSE
+2015-05-01,"Holiday","National","Ecuador","Dia del Trabajo",FALSE
+2015-05-09,"Additional","National","Ecuador","Dia de la Madre-1",FALSE
+2015-05-10,"Event","National","Ecuador","Dia de la Madre",FALSE
+2015-05-12,"Holiday","Local","Puyo","Cantonizacion del Puyo",FALSE
+2015-05-24,"Holiday","National","Ecuador","Batalla de Pichincha",FALSE
+2015-06-23,"Holiday","Local","Guaranda","Cantonizacion de Guaranda",FALSE
+2015-06-25,"Holiday","Local","Machala","Fundacion de Machala",FALSE
+2015-06-25,"Holiday","Regional","Imbabura","Provincializacion de Imbabura",FALSE
+2015-06-25,"Holiday","Local","Latacunga","Cantonizacion de Latacunga",FALSE
+2015-07-03,"Holiday","Local","El Carmen","Cantonizacion de El Carmen",FALSE
+2015-07-03,"Holiday","Local","Santo Domingo","Fundacion de Santo Domingo",FALSE
+2015-07-23,"Holiday","Local","Cayambe","Cantonizacion de Cayambe",FALSE
+2015-07-24,"Holiday","Local","Guayaquil","Fundacion de Guayaquil-1",FALSE
+2015-07-25,"Holiday","Local","Guayaquil","Fundacion de Guayaquil",FALSE
+2015-08-05,"Holiday","Local","Esmeraldas","Fundacion de Esmeraldas",FALSE
+2015-08-10,"Holiday","National","Ecuador","Primer Grito de Independencia",FALSE
+2015-08-15,"Holiday","Local","Riobamba","Fundacion de Riobamba",FALSE
+2015-08-24,"Holiday","Local","Ambato","Fundacion de Ambato",FALSE
+2015-09-28,"Holiday","Local","Ibarra","Fundacion de Ibarra",FALSE
+2015-10-07,"Holiday","Local","Quevedo","Cantonizacion de Quevedo",FALSE
+2015-10-09,"Holiday","National","Ecuador","Independencia de Guayaquil",FALSE
+2015-11-02,"Holiday","National","Ecuador","Dia de Difuntos",FALSE
+2015-11-03,"Holiday","National","Ecuador","Independencia de Cuenca",FALSE
+2015-11-06,"Holiday","Regional","Santo Domingo de los Tsachilas","Provincializacion de Santo Domingo",FALSE
+2015-11-07,"Holiday","Regional","Santa Elena","Provincializacion Santa Elena",FALSE
+2015-11-10,"Holiday","Local","Guaranda","Independencia de Guaranda",FALSE
+2015-11-11,"Holiday","Local","Latacunga","Independencia de Latacunga",FALSE
+2015-11-12,"Holiday","Local","Ambato","Independencia de Ambato",FALSE
+2015-11-27,"Event","National","Ecuador","Black Friday",FALSE
+2015-11-30,"Event","National","Ecuador","Cyber Monday",FALSE
+2015-12-05,"Additional","Local","Quito","Fundacion de Quito-1",FALSE
+2015-12-06,"Holiday","Local","Quito","Fundacion de Quito",FALSE
+2015-12-08,"Holiday","Local","Loja","Fundacion de Loja",FALSE
+2015-12-21,"Additional","National","Ecuador","Navidad-4",FALSE
+2015-12-22,"Additional","National","Ecuador","Navidad-3",FALSE
+2015-12-22,"Holiday","Local","Salinas","Cantonizacion de Salinas",FALSE
+2015-12-23,"Additional","National","Ecuador","Navidad-2",FALSE
+2015-12-24,"Additional","National","Ecuador","Navidad-1",FALSE
+2015-12-25,"Holiday","National","Ecuador","Navidad",FALSE
+2015-12-26,"Additional","National","Ecuador","Navidad+1",FALSE
+2015-12-31,"Additional","National","Ecuador","Primer dia del ano-1",FALSE
+2016-01-01,"Holiday","National","Ecuador","Primer dia del ano",FALSE
+2016-02-08,"Holiday","National","Ecuador","Carnaval",FALSE
+2016-02-09,"Holiday","National","Ecuador","Carnaval",FALSE
+2016-03-02,"Holiday","Local","Manta","Fundacion de Manta",FALSE
+2016-03-25,"Holiday","National","Ecuador","Viernes Santo",FALSE
+2016-04-01,"Holiday","Regional","Cotopaxi","Provincializacion de Cotopaxi",FALSE
+2016-04-12,"Holiday","Local","Cuenca","Fundacion de Cuenca",FALSE
+2016-04-14,"Holiday","Local","Libertad","Cantonizacion de Libertad",FALSE
+2016-04-16,"Event","National","Ecuador","Terremoto Manabi",FALSE
+2016-04-17,"Event","National","Ecuador","Terremoto Manabi+1",FALSE
+2016-04-18,"Event","National","Ecuador","Terremoto Manabi+2",FALSE
+2016-04-19,"Event","National","Ecuador","Terremoto Manabi+3",FALSE
+2016-04-20,"Event","National","Ecuador","Terremoto Manabi+4",FALSE
+2016-04-21,"Holiday","Local","Riobamba","Cantonizacion de Riobamba",FALSE
+2016-04-21,"Event","National","Ecuador","Terremoto Manabi+5",FALSE
+2016-04-22,"Event","National","Ecuador","Terremoto Manabi+6",FALSE
+2016-04-23,"Event","National","Ecuador","Terremoto Manabi+7",FALSE
+2016-04-24,"Event","National","Ecuador","Terremoto Manabi+8",FALSE
+2016-04-25,"Event","National","Ecuador","Terremoto Manabi+9",FALSE
+2016-04-26,"Event","National","Ecuador","Terremoto Manabi+10",FALSE
+2016-04-27,"Event","National","Ecuador","Terremoto Manabi+11",FALSE
+2016-04-28,"Event","National","Ecuador","Terremoto Manabi+12",FALSE
+2016-04-29,"Event","National","Ecuador","Terremoto Manabi+13",FALSE
+2016-04-30,"Event","National","Ecuador","Terremoto Manabi+14",FALSE
+2016-05-01,"Holiday","National","Ecuador","Dia del Trabajo",FALSE
+2016-05-01,"Event","National","Ecuador","Terremoto Manabi+15",FALSE
+2016-05-02,"Event","National","Ecuador","Terremoto Manabi+16",FALSE
+2016-05-03,"Event","National","Ecuador","Terremoto Manabi+17",FALSE
+2016-05-04,"Event","National","Ecuador","Terremoto Manabi+18",FALSE
+2016-05-05,"Event","National","Ecuador","Terremoto Manabi+19",FALSE
+2016-05-06,"Event","National","Ecuador","Terremoto Manabi+20",FALSE
+2016-05-07,"Additional","National","Ecuador","Dia de la Madre-1",FALSE
+2016-05-07,"Event","National","Ecuador","Terremoto Manabi+21",FALSE
+2016-05-08,"Event","National","Ecuador","Terremoto Manabi+22",FALSE
+2016-05-08,"Event","National","Ecuador","Dia de la Madre",FALSE
+2016-05-09,"Event","National","Ecuador","Terremoto Manabi+23",FALSE
+2016-05-10,"Event","National","Ecuador","Terremoto Manabi+24",FALSE
+2016-05-11,"Event","National","Ecuador","Terremoto Manabi+25",FALSE
+2016-05-12,"Holiday","Local","Puyo","Cantonizacion del Puyo",FALSE
+2016-05-12,"Event","National","Ecuador","Terremoto Manabi+26",FALSE
+2016-05-13,"Event","National","Ecuador","Terremoto Manabi+27",FALSE
+2016-05-14,"Event","National","Ecuador","Terremoto Manabi+28",FALSE
+2016-05-15,"Event","National","Ecuador","Terremoto Manabi+29",FALSE
+2016-05-16,"Event","National","Ecuador","Terremoto Manabi+30",FALSE
+2016-05-24,"Holiday","National","Ecuador","Batalla de Pichincha",TRUE
+2016-05-27,"Transfer","National","Ecuador","Traslado Batalla de Pichincha",FALSE
+2016-06-23,"Holiday","Local","Guaranda","Cantonizacion de Guaranda",FALSE
+2016-06-25,"Holiday","Local","Machala","Fundacion de Machala",FALSE
+2016-06-25,"Holiday","Regional","Imbabura","Provincializacion de Imbabura",FALSE
+2016-06-25,"Holiday","Local","Latacunga","Cantonizacion de Latacunga",FALSE
+2016-07-03,"Holiday","Local","El Carmen","Cantonizacion de El Carmen",FALSE
+2016-07-03,"Holiday","Local","Santo Domingo","Fundacion de Santo Domingo",FALSE
+2016-07-23,"Holiday","Local","Cayambe","Cantonizacion de Cayambe",FALSE
+2016-07-24,"Additional","Local","Guayaquil","Fundacion de Guayaquil-1",FALSE
+2016-07-24,"Transfer","Local","Guayaquil","Traslado Fundacion de Guayaquil",FALSE
+2016-07-25,"Holiday","Local","Guayaquil","Fundacion de Guayaquil",TRUE
+2016-08-05,"Holiday","Local","Esmeraldas","Fundacion de Esmeraldas",FALSE
+2016-08-10,"Holiday","National","Ecuador","Primer Grito de Independencia",TRUE
+2016-08-12,"Transfer","National","Ecuador","Traslado Primer Grito de Independencia",FALSE
+2016-08-15,"Holiday","Local","Riobamba","Fundacion de Riobamba",FALSE
+2016-08-24,"Holiday","Local","Ambato","Fundacion de Ambato",FALSE
+2016-09-28,"Holiday","Local","Ibarra","Fundacion de Ibarra",FALSE
+2016-10-07,"Holiday","Local","Quevedo","Cantonizacion de Quevedo",FALSE
+2016-10-09,"Holiday","National","Ecuador","Independencia de Guayaquil",FALSE
+2016-11-02,"Holiday","National","Ecuador","Dia de Difuntos",FALSE
+2016-11-03,"Holiday","National","Ecuador","Independencia de Cuenca",FALSE
+2016-11-04,"Bridge","National","Ecuador","Puente Dia de Difuntos",FALSE
+2016-11-06,"Holiday","Regional","Santo Domingo de los Tsachilas","Provincializacion de Santo Domingo",FALSE
+2016-11-07,"Holiday","Regional","Santa Elena","Provincializacion Santa Elena",FALSE
+2016-11-10,"Holiday","Local","Guaranda","Independencia de Guaranda",FALSE
+2016-11-11,"Holiday","Local","Latacunga","Independencia de Latacunga",FALSE
+2016-11-12,"Holiday","Local","Ambato","Independencia de Ambato",FALSE
+2016-11-12,"Work Day","National","Ecuador","Recupero Puente Dia de Difuntos",FALSE
+2016-11-25,"Event","National","Ecuador","Black Friday",FALSE
+2016-11-28,"Event","National","Ecuador","Cyber Monday",FALSE
+2016-12-05,"Additional","Local","Quito","Fundacion de Quito-1",FALSE
+2016-12-06,"Holiday","Local","Quito","Fundacion de Quito",FALSE
+2016-12-08,"Holiday","Local","Loja","Fundacion de Loja",FALSE
+2016-12-21,"Additional","National","Ecuador","Navidad-4",FALSE
+2016-12-22,"Additional","National","Ecuador","Navidad-3",FALSE
+2016-12-22,"Holiday","Local","Salinas","Cantonizacion de Salinas",FALSE
+2016-12-23,"Additional","National","Ecuador","Navidad-2",FALSE
+2016-12-24,"Additional","National","Ecuador","Navidad-1",FALSE
+2016-12-25,"Holiday","National","Ecuador","Navidad",FALSE
+2016-12-26,"Additional","National","Ecuador","Navidad+1",FALSE
+2016-12-31,"Additional","National","Ecuador","Primer dia del ano-1",FALSE
+2017-01-01,"Holiday","National","Ecuador","Primer dia del ano",TRUE
+2017-01-02,"Transfer","National","Ecuador","Traslado Primer dia del ano",FALSE
+2017-02-27,"Holiday","National","Ecuador","Carnaval",FALSE
+2017-02-28,"Holiday","National","Ecuador","Carnaval",FALSE
+2017-03-02,"Holiday","Local","Manta","Fundacion de Manta",FALSE
+2017-04-01,"Holiday","Regional","Cotopaxi","Provincializacion de Cotopaxi",FALSE
+2017-04-12,"Holiday","Local","Cuenca","Fundacion de Cuenca",TRUE
+2017-04-13,"Transfer","Local","Cuenca","Fundacion de Cuenca",FALSE
+2017-04-14,"Holiday","Local","Libertad","Cantonizacion de Libertad",FALSE
+2017-04-14,"Holiday","National","Ecuador","Viernes Santo",FALSE
+2017-04-21,"Holiday","Local","Riobamba","Cantonizacion de Riobamba",FALSE
+2017-05-01,"Holiday","National","Ecuador","Dia del Trabajo",FALSE
+2017-05-12,"Holiday","Local","Puyo","Cantonizacion del Puyo",FALSE
+2017-05-13,"Additional","National","Ecuador","Dia de la Madre-1",FALSE
+2017-05-14,"Event","National","Ecuador","Dia de la Madre",FALSE
+2017-05-24,"Holiday","National","Ecuador","Batalla de Pichincha",TRUE
+2017-05-26,"Transfer","National","Ecuador","Traslado Batalla de Pichincha",FALSE
+2017-06-23,"Holiday","Local","Guaranda","Cantonizacion de Guaranda",FALSE
+2017-06-25,"Holiday","Regional","Imbabura","Provincializacion de Imbabura",FALSE
+2017-06-25,"Holiday","Local","Latacunga","Cantonizacion de Latacunga",FALSE
+2017-06-25,"Holiday","Local","Machala","Fundacion de Machala",FALSE
+2017-07-03,"Holiday","Local","El Carmen","Cantonizacion de El Carmen",FALSE
+2017-07-03,"Holiday","Local","Santo Domingo","Fundacion de Santo Domingo",FALSE
+2017-07-23,"Holiday","Local","Cayambe","Cantonizacion de Cayambe",FALSE
+2017-07-24,"Additional","Local","Guayaquil","Fundacion de Guayaquil-1",FALSE
+2017-07-25,"Additional","Local","Guayaquil","Fundacion de Guayaquil",FALSE
+2017-08-05,"Holiday","Local","Esmeraldas","Fundacion de Esmeraldas",FALSE
+2017-08-10,"Holiday","National","Ecuador","Primer Grito de Independencia",TRUE
+2017-08-11,"Transfer","National","Ecuador","Traslado Primer Grito de Independencia",FALSE
+2017-08-15,"Holiday","Local","Riobamba","Fundacion de Riobamba",FALSE
+2017-08-24,"Holiday","Local","Ambato","Fundacion de Ambato",FALSE
+2017-09-28,"Holiday","Local","Ibarra","Fundacion de Ibarra",TRUE
+2017-09-29,"Transfer","Local","Ibarra","Fundacion de Ibarra",FALSE
+2017-10-07,"Holiday","Local","Quevedo","Cantonizacion de Quevedo",FALSE
+2017-10-09,"Holiday","National","Ecuador","Independencia de Guayaquil",FALSE
+2017-11-02,"Holiday","National","Ecuador","Dia de Difuntos",FALSE
+2017-11-03,"Holiday","National","Ecuador","Independencia de Cuenca",FALSE
+2017-11-06,"Holiday","Regional","Santo Domingo de los Tsachilas","Provincializacion de Santo Domingo",FALSE
+2017-11-07,"Holiday","Regional","Santa Elena","Provincializacion Santa Elena",FALSE
+2017-11-10,"Holiday","Local","Guaranda","Independencia de Guaranda",FALSE
+2017-11-11,"Holiday","Local","Latacunga","Independencia de Latacunga",FALSE
+2017-11-12,"Holiday","Local","Ambato","Independencia de Ambato",FALSE
+2017-12-05,"Additional","Local","Quito","Fundacion de Quito-1",FALSE
+2017-12-06,"Holiday","Local","Quito","Fundacion de Quito",TRUE
+2017-12-08,"Holiday","Local","Loja","Fundacion de Loja",FALSE
+2017-12-08,"Transfer","Local","Quito","Traslado Fundacion de Quito",FALSE
+2017-12-21,"Additional","National","Ecuador","Navidad-4",FALSE
+2017-12-22,"Holiday","Local","Salinas","Cantonizacion de Salinas",FALSE
+2017-12-22,"Additional","National","Ecuador","Navidad-3",FALSE
+2017-12-23,"Additional","National","Ecuador","Navidad-2",FALSE
+2017-12-24,"Additional","National","Ecuador","Navidad-1",FALSE
+2017-12-25,"Holiday","National","Ecuador","Navidad",FALSE
+2017-12-26,"Additional","National","Ecuador","Navidad+1",FALSE
